@@ -15,6 +15,8 @@ int main()
 	HANDLE hChildReadOver   = NULL;
 	//声明字符串
 	string str;
+	//是否提示用户子进程已读完毕
+	bool giveHint           = false;
 
 	//子进程名称
 	TCHAR* appName = TEXT("D:\\操作系统\\实验二\\1\\OS_expe2_1_child\\Debug\\OS_expe2_1_child.exe");
@@ -93,8 +95,6 @@ int main()
 		goto FATHER_PROCESS_END;  
 	}
 
-	cout<<"请输入字符串："<<endl;
-
 	do
 	{
 		//临时字符数组
@@ -105,6 +105,16 @@ int main()
 		//重置子进程读完毕事件
 		if (!ResetEvent(hChildReadOver)) 
 			goto FATHER_PROCESS_END; 
+		//第一次不提示用户子进程读完毕
+		if(!giveHint)
+		{
+			cout<<"请输入字符串："<<endl;
+			giveHint = true;
+		} 
+		else
+		{
+			cout<<"子进程已读完毕，请继续输入字符串："<<endl;
+		}
 		//获取输入
 		gets(temp);
 		//将输入字符串赋给str
